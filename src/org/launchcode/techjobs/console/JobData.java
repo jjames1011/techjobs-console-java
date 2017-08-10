@@ -20,6 +20,8 @@ public class JobData {
     private static Boolean isDataLoaded = false;
 
     private static ArrayList<HashMap<String, String>> allJobs;
+    //private static ArrayList<HashMap<String, String>> jobs = new ArrayList<>();
+
 
     /**
      * Fetch list of all values from loaded data,
@@ -73,8 +75,8 @@ public class JobData {
         ArrayList<HashMap<String, String>> jobs = new ArrayList<>();
 
         for (HashMap<String, String> row : allJobs) {
-
-            String aValue = row.get(column);
+        //use toLowerCase() to make search methods case-insensitive.
+            String aValue = row.get(column).toLowerCase();
 
             if (aValue.contains(value)) {
                 jobs.add(row);
@@ -123,6 +125,29 @@ public class JobData {
             System.out.println("Failed to load job data");
             e.printStackTrace();
         }
+    }
+    public static ArrayList<HashMap<String, String>> findByValue(String value) {
+        //load data, if not already loaded
+        loadData();
+
+        //create searchJobs variable
+        ArrayList<HashMap<String, String>> searchJobs = new ArrayList<>();
+
+        //iterate through all jobs row by row
+        for (HashMap<String, String> row: allJobs){
+
+            //inside of each row, look for search value
+            for (HashMap.Entry<String, String> entry : row.entrySet()){
+                //use toLowerCase() here for case insensitive search
+                String currentVal = entry.getValue().toLowerCase();
+                //check if the user input value is contained in currentVal
+                if(currentVal.contains(value) && !searchJobs.contains(row)) {
+                    searchJobs.add(row);
+                }
+            }
+        }
+        return searchJobs;
+
     }
 
 }
